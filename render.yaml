@@ -1,0 +1,23 @@
+# Paid compute and a persistent disk are required for the SQLite database.
+services:
+  - type: web
+    name: court-notes
+    runtime: node
+    plan: 0.5c-512mb
+    numInstances: 1
+    buildCommand: npm run check && npm test
+    startCommand: node server.mjs
+    healthCheckPath: /healthz
+    disk:
+      name: court-notes-data
+      mountPath: /var/lib/court-notes
+      sizeGB: 1
+    envVars:
+      - key: NODE_VERSION
+        value: 22.14.0
+      - key: NODE_ENV
+        value: production
+      - key: OPEN_BROWSER
+        value: "0"
+      - key: DATA_DIR
+        value: /var/lib/court-notes
